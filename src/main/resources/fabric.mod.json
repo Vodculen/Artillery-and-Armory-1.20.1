@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "artilleryandarmory",
+	"version": "${version}",
+	"name": "Artillery & Armory",
+	"description": "Artillery & Armory brings cool new weapons to your game that you can play around with.",
+	"authors": [
+		"Vodculen",
+		"Noava"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/artilleryandarmory/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.vodculen.artilleryandarmory.ArtilleryArmory"
+		],
+		"client": [
+			"net.vodculen.artilleryandarmory.ArtilleryArmoryClient"
+		],
+		"fabric-datagen": [
+			"net.vodculen.artilleryandarmory.ArtilleryArmoryDataGenerator"
+		]
+	},
+	"mixins": [
+		"artilleryandarmory.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
