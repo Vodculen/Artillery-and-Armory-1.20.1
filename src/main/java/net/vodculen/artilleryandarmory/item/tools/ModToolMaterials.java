@@ -16,10 +16,12 @@ public enum ModToolMaterials implements ToolMaterial {
 	private final float miningSpeed; // how fast it breaks stuff
 	private final float attackDamage; // how much damage 
 	private final int enchantability; // the max amout of ex you can use on the item before "Too Expensive"
+	@SuppressWarnings("deprecation")
 	private final Lazy<Ingredient> repairIngredient; // what ingredient it uses to repair itself in the anvil
 
 
 	// TODO Please don't touch anything below this 
+	@SuppressWarnings("deprecation")
 	private ModToolMaterials(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability, Supplier<Ingredient> repairIngredient) {
 		this.miningLevel = miningLevel;
 		this.itemDurability = itemDurability;
@@ -54,6 +56,7 @@ public enum ModToolMaterials implements ToolMaterial {
 		return this.enchantability;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Ingredient getRepairIngredient() {
 		return this.repairIngredient.get();
