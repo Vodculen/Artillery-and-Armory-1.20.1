@@ -16,6 +16,7 @@ public class ModItemGroups {
         FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.TEST)).displayName(Text.translatable("itemgroup.test_item_group"))
         .entries((displayContext, entries) -> {
             entries.add(ModItems.TEST);
+            entries.add(ModItems.COOLIUM_SWORD);
         }).build());
     
     public static void registerItemGroups() {
