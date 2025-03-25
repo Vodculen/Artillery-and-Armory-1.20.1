@@ -9,8 +9,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.text.Text;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
-
-
 public class ModItemGroups {
     public static final ItemGroup TEST_ITEM_GROUP = Registry.register(Registries.ITEM_GROUP, Identifier.of(ArtilleryArmory.MOD_ID, "test_item_group"),
         FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.TEST)).displayName(Text.translatable("itemgroup.test_item_group"))
@@ -20,6 +18,7 @@ public class ModItemGroups {
             // copy whats above 
         }).build());
     
+
     public static void registerItemGroups() {
         ArtilleryArmory.LOGGER.info("Registering Item Groups for " + ArtilleryArmory.MOD_ID);
     }
