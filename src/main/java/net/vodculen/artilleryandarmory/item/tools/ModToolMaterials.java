@@ -9,7 +9,7 @@ import net.minecraft.util.Lazy;
 
 public enum ModToolMaterials implements ToolMaterial {
 	// Material name, copy-paste it and change values
-	COOLIUM(3, 1159, 20.0F, 100.0F, 15, () -> Ingredient.ofItems(Items.SEA_PICKLE));
+	COOLIUM(3, 1159, 20.0F, 1.0F, 15, () -> Ingredient.ofItems(Items.SEA_PICKLE));
 
 	private final int miningLevel; // 1 = wood, 2 = iron, 3 = diamond, 4 = netherite
 	private final int itemDurability; // how many uses 
