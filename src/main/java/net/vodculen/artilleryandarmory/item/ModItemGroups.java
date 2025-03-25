@@ -17,6 +17,7 @@ public class ModItemGroups {
         .entries((displayContext, entries) -> {
             entries.add(ModItems.TEST);
             entries.add(ModItems.COOLIUM_SWORD);
+            // copy whats above 
         }).build());
     
     public static void registerItemGroups() {

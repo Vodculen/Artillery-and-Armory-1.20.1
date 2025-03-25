@@ -10,7 +10,8 @@ import net.minecraft.util.Identifier;
 
 public class ModItems { 
     public static final Item TEST = registerItem("test", new Item(new Item.Settings()));
-    // Copy-paste this and jut rename stuff so it matches 
+    // Copy-paste this and jut rename stuff so it matches
+    // TODO make sure you put with quotes "item.artilleryandarmory.[weapon name]": "[weapon name fancy]" weapon name = lower case version in the "" in the Item class
     public static final Item COOLIUM_SWORD = registerItem("coolium_sword", new SwordItem(ModToolMaterials.COOLIUM, 170, 70, new Item.Settings())); // this is just extra attack damage and speed for the sword to apply to itself while the rest of the tools will use the values declared in the ModToolMaterials 
 
     private static Item registerItem(String name, Item item) {
