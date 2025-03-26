@@ -14,12 +14,12 @@ public class ModApplyEffects {
             if (!world.isClient && entity instanceof LivingEntity target) {
                 ItemStack heldItem = player.getStackInHand(hand);
 
-                if (heldItem.getItem() == ModItems.COOLIUM_SWORD) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1000, 254, false, false));
+                if (heldItem.getItem() == ModItems.HAMMER) {
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20, 254, true, true));
                 }
             }
 
             return ActionResult.PASS;
         });
-    }
+    }   
 }

@@ -16,6 +16,6 @@ public class ArtilleryArmory implements ModInitializer {
 	public void onInitialize() {
 		ModItems.registerModItems();
 		ModItemGroups.registerItemGroups();
-		// ModApplyEffects.applyStunEffect();
+		ModApplyEffects.applyStunEffect();
 	}
 }
