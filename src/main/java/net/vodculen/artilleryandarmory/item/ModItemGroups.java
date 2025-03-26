@@ -15,7 +15,11 @@ public class ModItemGroups {
         .entries((displayContext, entries) -> {
             entries.add(ModItems.TEST);
             entries.add(ModItems.COOLIUM_SWORD);
+<<<<<<< HEAD
             // copy whats above 
+=======
+            entries.add(ModItems.HAMMER);
+>>>>>>> origin/Goofy-goober
         }).build());
     
 
