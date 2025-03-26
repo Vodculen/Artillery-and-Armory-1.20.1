@@ -13,22 +13,20 @@ import net.minecraft.world.World;
 import net.vodculen.artilleryandarmory.item.ModItems;
 
 public class Hammer extends SwordItem {
+
     public Hammer(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
-    
+
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         World world = user.getWorld();
 
         if (!world.isClient) {
-            ItemStack heldItem = user.getStackInHand(hand);
-
-            if (heldItem.getItem() == ModItems.COOLIUM_SWORD) {
-                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 10, 254, true, true));
-            }
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1000, 254, false, false));
         }        
-            
+        
         return super.useOnEntity(stack, user, entity, hand);
     }
+
 }
