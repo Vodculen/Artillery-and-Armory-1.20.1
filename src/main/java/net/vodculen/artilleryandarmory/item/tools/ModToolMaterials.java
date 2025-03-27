@@ -2,7 +2,6 @@ package net.vodculen.artilleryandarmory.item.tools;
 
 import java.util.function.Supplier;
 
-import net.fabricmc.fabric.api.recipe.v1.ingredient.DefaultCustomIngredients;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
