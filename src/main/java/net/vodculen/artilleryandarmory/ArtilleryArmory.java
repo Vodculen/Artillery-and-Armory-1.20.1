@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import net.fabricmc.api.ModInitializer;
 import net.vodculen.artilleryandarmory.item.ModItemGroups;
 import net.vodculen.artilleryandarmory.item.ModItems;
+import net.vodculen.artilleryandarmory.effect.ModEffects;
+
+
 
 public class ArtilleryArmory implements ModInitializer {
 	public static final String MOD_ID = "artilleryandarmory";
@@ -15,5 +18,6 @@ public class ArtilleryArmory implements ModInitializer {
 	public void onInitialize() {
 		ModItems.registerModItems();
 		ModItemGroups.registerItemGroups();
+		ModEffects.registerModEffects();
 	}
 }
