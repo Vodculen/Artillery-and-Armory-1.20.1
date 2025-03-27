@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "+": {
+      "item": "minecraft:anvil"
+    },
+    "-": {
+      "item": "minecraft:iron_ingot"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    },
+    "_": {
+      "item": "minecraft:red_carpet"
+    }
+  },
+  "pattern": [
+    " -+",
+    "_/-",
+    "/  "
+  ],
+  "result": {
+    "item": "artilleryandarmory:hammer"
+  },
+  "show_notification": true
+}

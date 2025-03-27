@@ -1,5 +1,7 @@
 {
-    "item.artilleryandarmory.test": "Test",
-    "item.artilleryandarmory.coolium_sword": "Coolium Sword",
-    "itemgroup.test_item_group": "Test Group"
+    "item.artilleryandarmory.hammer": "Hammer",
+
+    "effect.artilleryandarmory.dazed": "Dazed",
+
+    "itemgroup.artillery_and_armory_item_group": "Artillery & Armory"
 }
