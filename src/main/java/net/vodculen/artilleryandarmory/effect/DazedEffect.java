@@ -19,7 +19,4 @@ public class DazedEffect extends StatusEffect {
 
         super.applyUpdateEffect(entity, amplifier);
     }
-
-    
-
 }

@@ -14,6 +14,7 @@ public class ModItemGroups {
         FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.HAMMER)).displayName(Text.translatable("itemgroup.artillery_and_armory_item_group"))
         .entries((displayContext, entries) -> {
             entries.add(ModItems.HAMMER);
+            entries.add(ModItems.LANCE);
         }).build());
     
 
