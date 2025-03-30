@@ -12,11 +12,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.Vanishable;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -24,6 +28,7 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.World.ExplosionSourceType;
+import net.vodculen.artilleryandarmory.damageType.ModDamageTypes;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
 import net.vodculen.artilleryandarmory.util.WeaponUtils;
 
@@ -61,14 +66,14 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 				}
 
 				int i = this.getMaxUseTime(stack) - remainingUseTicks;
-				float f = getPullProgress(i);
 
-				if (!(f < 0.1)) {
+				if (i >= 10) {
 					boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER);
 					if (!world.isClient) {
 						world.createExplosion(null, user.getX(), user.getY(), user.getZ(), 1, false, ExplosionSourceType.BLOCK);
 						
 						stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
+						((PlayerEntity) user).getItemCooldownManager().set(this, 60);
 					}
 
 					
@@ -85,19 +90,9 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 		}
 	}
 
-	public static float getPullProgress(int useTicks) {
-		float f = useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
 	@Override
 	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
+		return 36000;
 	}
 
 	@Override

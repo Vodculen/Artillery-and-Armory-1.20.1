@@ -7,6 +7,7 @@ import net.vodculen.artilleryandarmory.entity.ModEntities;
 import net.vodculen.artilleryandarmory.entity.client.KunaiProjectileModel;
 import net.vodculen.artilleryandarmory.entity.client.KunaiProjectileRenderer;
 
+
 public class ArtilleryArmoryClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {

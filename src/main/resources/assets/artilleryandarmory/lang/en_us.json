@@ -11,6 +11,7 @@
     "entity.artilleryandarmory.kunai": "Kunai",
 
     "death.attack.festering": "%1$s turned to dust!",
+    "death.attack.exploded": "%1$s exploded mid-air!",
 
     "itemgroup.artillery_and_armory_item_group": "Artillery & Armory"
 }

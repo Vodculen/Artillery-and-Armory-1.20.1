@@ -1,6 +1,7 @@
 package net.vodculen.artilleryandarmory.entity.client;
 
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -23,7 +24,7 @@ public class KunaiProjectileRenderer extends EntityRenderer<KunaiProjectileEntit
     public void render(KunaiProjectileEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
-        VertexConsumer vertexconsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, this.model.getLayer(Identifier.of(ArtilleryArmory.MOD_ID, "textures/entity/kunai/kunai.png")), false, false);
+        VertexConsumer vertexconsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(Identifier.of(ArtilleryArmory.MOD_ID, "textures/entity/kunai/kunai.png")));
         this.model.render(matrices, vertexconsumer, light, OverlayTexture.DEFAULT_UV, light, light, light, light);
 
         matrices.pop();
