@@ -1,5 +1,7 @@
 package net.vodculen.artilleryandarmory.item.weapons;
 
+import java.util.function.Predicate;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
@@ -12,18 +14,27 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.Vanishable;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.World.ExplosionSourceType;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.util.WeaponUtils;
 
-public class Hammer extends Item implements Vanishable {
+
+public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	private final float attackDamage;
 	private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+	public static final int TICKS_PER_SECOND = 20;
+	public static final int RANGE = 15;
 
-	public Hammer(int attackDamage, float attackSpeed, Settings settings) {
+	public Chamber(int attackDamage, float attackSpeed, Settings settings) {
 		super(settings);
 		this.attackDamage = attackDamage;
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
@@ -36,6 +47,82 @@ public class Hammer extends Item implements Vanishable {
 			new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", (double)attackSpeed, EntityAttributeModifier.Operation.ADDITION)
 		);
 		this.attributeModifiers = builder.build();
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		if (user instanceof PlayerEntity playerEntity) {
+			boolean bl = playerEntity.getAbilities().creativeMode;
+			ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, playerEntity);
+
+			if (!itemStack.isEmpty() || bl) {
+				if (itemStack.isEmpty()) {
+					itemStack = new ItemStack(Items.GUNPOWDER);
+				}
+
+				int i = this.getMaxUseTime(stack) - remainingUseTicks;
+				float f = getPullProgress(i);
+
+				if (!(f < 0.1)) {
+					boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER);
+					if (!world.isClient) {
+						world.createExplosion(null, user.getX(), user.getY(), user.getZ(), 1, false, ExplosionSourceType.BLOCK);
+						
+						stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
+					}
+
+					
+					if (!bl2 && !playerEntity.getAbilities().creativeMode) {
+						itemStack.decrement(3);
+						if (itemStack.isEmpty()) {
+							playerEntity.getInventory().removeOne(itemStack);
+						}
+					}
+
+					playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+				}
+			}
+		}
+	}
+
+	public static float getPullProgress(int useTicks) {
+		float f = useTicks / 20.0F;
+		f = (f * f + f * 2.0F) / 3.0F;
+		if (f > 1.0F) {
+			f = 1.0F;
+		}
+
+		return f;
+	}
+
+	@Override
+	public int getMaxUseTime(ItemStack stack) {
+		return 72000;
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return UseAction.BOW;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack itemStack = user.getStackInHand(hand);
+		ItemStack projectile = WeaponUtils.getProjectileTypeForWeapon(itemStack, user);
+
+		boolean isValidProjectile = !projectile.isEmpty();
+
+		if (!user.getAbilities().creativeMode && !isValidProjectile) {
+			return TypedActionResult.fail(itemStack);
+		} else {
+			user.setCurrentHand(hand);
+			return TypedActionResult.consume(itemStack);
+		}
+	}
+
+	@Override
+	public Predicate<ItemStack> getExplosives() {
+		return EXPLODING_PROJECTILES;
 	}
 
 	@Override

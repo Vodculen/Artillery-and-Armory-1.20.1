@@ -4,9 +4,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
-public class DazedEffect extends StatusEffect {
-    protected DazedEffect() {
-        super(StatusEffectCategory.HARMFUL, 0xdc75f7);
+public class ChargeEffect extends StatusEffect {
+    protected ChargeEffect() {
+        super(StatusEffectCategory.BENEFICIAL, 0xfaf953);
     }
 
     @Override

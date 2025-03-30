@@ -9,16 +9,19 @@ import net.minecraft.util.Identifier;
 import net.minecraft.text.Text;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
-public class ModItemGroups {
-    public static final ItemGroup ARTILLERY_AND_ARMORY_ITEM_GROUP = Registry.register(Registries.ITEM_GROUP, Identifier.of(ArtilleryArmory.MOD_ID, "artillery_and_armory_item_group"),
-        FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.HAMMER)).displayName(Text.translatable("itemgroup.artillery_and_armory_item_group"))
-        .entries((displayContext, entries) -> {
-            entries.add(ModItems.HAMMER);
-            entries.add(ModItems.LANCE);
-        }).build());
-    
 
-    public static void registerItemGroups() {
-        ArtilleryArmory.LOGGER.info("Registering Item Groups for " + ArtilleryArmory.MOD_ID);
-    }
+public class ModItemGroups {
+	public static final ItemGroup ARTILLERY_AND_ARMORY_ITEM_GROUP = Registry.register(Registries.ITEM_GROUP, Identifier.of(ArtilleryArmory.MOD_ID, "artillery_and_armory_item_group"),
+		FabricItemGroup.builder().icon(() -> new ItemStack(ModItems.HAMMER)).displayName(Text.translatable("itemgroup.artillery_and_armory_item_group"))
+		.entries((displayContext, entries) -> {
+			entries.add(ModItems.HAMMER);
+			entries.add(ModItems.LANCE);
+			entries.add(ModItems.CHAMBER);
+			entries.add(ModItems.KUNAI);
+		}).build());
+	
+
+	public static void registerItemGroups() {
+		ArtilleryArmory.LOGGER.info("Registering Item Groups for " + ArtilleryArmory.MOD_ID);
+	}
 }

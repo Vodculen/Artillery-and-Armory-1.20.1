@@ -21,8 +21,7 @@ public class ModModelProvider extends FabricModelProvider {
 	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 		itemModelGenerator.register(ModItems.HAMMER, Models.GENERATED);
 		itemModelGenerator.register(ModItems.LANCE, Models.GENERATED);
-		// please remove [] and in place put the name of your weapon in CAPS, itemModelGenerator.register(ModItems.[your weapon name], Models.GENERATED);
-		// If you want it to have a texture rename the texture to exactly the lower case name in the "" in your items class
+		itemModelGenerator.register(ModItems.KUNAI, Models.GENERATED);
 	}
 
 }

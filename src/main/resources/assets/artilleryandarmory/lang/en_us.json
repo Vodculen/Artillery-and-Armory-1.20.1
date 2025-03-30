@@ -1,7 +1,16 @@
 {
     "item.artilleryandarmory.hammer": "Hammer",
+    "item.artilleryandarmory.chamber": "Chamber",
+    "item.artilleryandarmory.kunai": "Kunai",
+    "item.artilleryandarmory.lance": "Lance",
 
     "effect.artilleryandarmory.dazed": "Dazed",
+    "effect.artilleryandarmory.charge": "Charge",
+    "effect.artilleryandarmory.festering": "Festering",
+
+    "entity.artilleryandarmory.kunai": "Kunai",
+
+    "death.attack.festering": "%1$s turned to dust!",
 
     "itemgroup.artillery_and_armory_item_group": "Artillery & Armory"
 }
