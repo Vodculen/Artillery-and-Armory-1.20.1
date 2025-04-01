@@ -7,4 +7,6 @@ import net.minecraft.util.Identifier;
 
 public class ModDamageTypes {
 	public static final RegistryKey<DamageType> FESTERING = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("artilleryandarmory", "festering"));
+	public static final RegistryKey<DamageType> KUNAIED = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("artilleryandarmory", "kunaied"));
+	public static final RegistryKey<DamageType> LANCED = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("artilleryandarmory", "lanced"));
 }

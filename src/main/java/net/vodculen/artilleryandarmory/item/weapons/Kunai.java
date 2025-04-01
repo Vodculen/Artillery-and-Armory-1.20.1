@@ -29,7 +29,7 @@ import net.vodculen.artilleryandarmory.entity.custom.KunaiProjectileEntity;
 public class Kunai extends Item implements Vanishable {
 	public static final int field_30926 = 10;
 	public static final float ATTACK_DAMAGE = 8.0F;
-	public static final float field_30928 = 2.5F;
+	public static final float field_30928 = 3.5F;
 	private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
 	public Kunai(Item.Settings settings) {

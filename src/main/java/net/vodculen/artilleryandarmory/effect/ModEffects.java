@@ -18,6 +18,10 @@ public class ModEffects {
 	).addAttributeModifier(
         EntityAttributes.GENERIC_ATTACK_DAMAGE, "648D7064-6A60-4F59-8ABE-C2C23A6DD7A9", 2F, EntityAttributeModifier.Operation.ADDITION
     ));
+    public static final StatusEffect HORSE_CHARGE = registerEffect("horse_charge", new ChargeEffect().addAttributeModifier(
+        EntityAttributes.GENERIC_ATTACK_DAMAGE, "648D7064-6A60-4F59-8ABE-C2C23A6DD7A9", 3F, EntityAttributeModifier.Operation.ADDITION
+    ));
+    
     public static final StatusEffect FESTERING = registerEffect("festering", new FesteringEffect());
     
     private static StatusEffect registerEffect(String name, StatusEffect statusEffect) {

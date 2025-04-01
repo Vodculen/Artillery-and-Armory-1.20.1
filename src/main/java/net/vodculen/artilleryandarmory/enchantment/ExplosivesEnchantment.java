@@ -2,17 +2,12 @@ package net.vodculen.artilleryandarmory.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.item.ItemStack;
-import net.vodculen.artilleryandarmory.effect.ModEffects;
 import net.vodculen.artilleryandarmory.item.ModItems;
 
-public class HorseBackEnchantment extends Enchantment {
-	public HorseBackEnchantment() {
+public class ExplosivesEnchantment extends Enchantment {
+	public ExplosivesEnchantment() {
 		super(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 	}
 
@@ -28,7 +23,7 @@ public class HorseBackEnchantment extends Enchantment {
 
 	@Override
 	public boolean isAcceptableItem(ItemStack stack) {
-		return stack.isOf(ModItems.LANCE);
+		return stack.isOf(ModItems.CHAMBER);
 	}
 
 	@Override

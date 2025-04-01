@@ -1,20 +1,25 @@
 package net.vodculen.artilleryandarmory.item.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Vanishable;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -22,6 +27,9 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.enchantment.ModEnchantmentHelper;
+import net.vodculen.artilleryandarmory.item.ModItems;
+
 
 public class Lance extends Item implements Vanishable {
 	public static final int field_30926 = 10;
@@ -114,5 +122,21 @@ public class Lance extends Item implements Vanishable {
 	@Override
 	public int getEnchantability() {
 		return 1;
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+		if (entity instanceof ServerPlayerEntity player) {
+			if (player.getVehicle() instanceof HorseEntity horse && stack.isOf(ModItems.LANCE) && selected == true) {
+				int level = ModEnchantmentHelper.getHorseBack(stack);
+				if (level >= 1 && stack.isOf(ModItems.LANCE)) {
+					player.addStatusEffect(new StatusEffectInstance(ModEffects.HORSE_CHARGE, 10, 1, true, true));
+					horse.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, 1, false, false));
+				}
+			}
+		}
+		
+
+		super.inventoryTick(stack, world, entity, slot, selected);
 	}
 }

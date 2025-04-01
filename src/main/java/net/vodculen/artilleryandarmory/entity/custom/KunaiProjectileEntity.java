@@ -16,12 +16,14 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.vodculen.artilleryandarmory.damageType.ModDamageTypes;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
 import net.vodculen.artilleryandarmory.entity.ModEntities;
 import net.vodculen.artilleryandarmory.item.ModItems;
@@ -108,6 +110,7 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		Entity entity = entityHitResult.getEntity();
+		World world = entity.getWorld();
 		float f = 3.0F;
 		if (entity instanceof LivingEntity livingEntity) {
 			f += EnchantmentHelper.getAttackDamage(this.kunaiStack, livingEntity.getGroup());
@@ -115,7 +118,10 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		}
 
 		Entity entity2 = this.getOwner();
-		DamageSource damageSource = this.getDamageSources().trident(this, (Entity)(entity2 == null ? this : entity2));
+		DamageSource damageSource = new DamageSource(
+		world.getRegistryManager()
+				.get(RegistryKeys.DAMAGE_TYPE)
+				.entryOf(ModDamageTypes.KUNAIED));
 		this.dealtDamage = true;
 		SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_HIT;
 		if (entity.damage(damageSource, f)) {
@@ -124,9 +130,9 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 			}
 
 			if (entity instanceof LivingEntity livingEntity2) {
-				if (entity2 instanceof LivingEntity) {
+				if (entity2 instanceof LivingEntity livingEntity) {
 					EnchantmentHelper.onUserDamaged(livingEntity2, entity2);
-					EnchantmentHelper.onTargetDamaged((LivingEntity)entity2, livingEntity2);
+					EnchantmentHelper.onTargetDamaged(livingEntity, livingEntity2);
 				}
 
 				this.onHit(livingEntity2);

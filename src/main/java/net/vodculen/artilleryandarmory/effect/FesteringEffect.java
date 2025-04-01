@@ -23,7 +23,7 @@ public class FesteringEffect extends StatusEffect {
 		World world = entity.getWorld();
 		if (!world.isClient) {
 			DamageSource damageSource = new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(ModDamageTypes.FESTERING));
-			entity.damage(damageSource, 1.0F); // Damage the entity
+			entity.damage(damageSource, 1.0F);
 		}
 		
 		super.applyUpdateEffect(entity, amplifier);

@@ -10,6 +10,8 @@
 
     "entity.artilleryandarmory.kunai": "Kunai",
 
+    "enchantment.artilleryandarmory.horse_back": "Horse Back",
+
     "death.attack.festering": "%1$s turned to dust!",
     "death.attack.exploded": "%1$s exploded mid-air!",
 

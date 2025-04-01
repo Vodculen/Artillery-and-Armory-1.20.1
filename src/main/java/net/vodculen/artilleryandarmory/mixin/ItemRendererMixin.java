@@ -19,7 +19,12 @@ public abstract class ItemRendererMixin {
     public BakedModel useHammerModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if (stack.isOf(ModItems.HAMMER) && renderMode != ModelTransformationMode.GUI) {
             return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "hammer_3d", "inventory"));
+        } if (stack.isOf(ModItems.KUNAI) && renderMode != ModelTransformationMode.GUI) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "kunai_3d", "inventory"));
+        } if (stack.isOf(ModItems.CHAMBER) && renderMode != ModelTransformationMode.GUI) {
+            return ((ItemRendererAccessor) this).mccourse$getModels().getModelManager().getModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "chamber_3d", "inventory"));
         }
+
         return value;
     }
 }
