@@ -11,4 +11,12 @@ public class ModEnchantmentHelper extends EnchantmentHelper {
     public static int getExplosives(ItemStack stack) {
 		return getLevel(ModEnchantments.EXPLOSIVES, stack);
 	}
+
+	public static int getInflict(ItemStack stack) {
+		return getLevel(ModEnchantments.INFLICT, stack);
+	}
+
+	public static int getJumble(ItemStack stack) {
+		return getLevel(ModEnchantments.JUMBLE, stack);
+	}
 }

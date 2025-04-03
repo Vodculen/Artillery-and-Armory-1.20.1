@@ -6,11 +6,15 @@
 
     "effect.artilleryandarmory.dazed": "Dazed",
     "effect.artilleryandarmory.charge": "Charge",
+    "effect.artilleryandarmory.horse_charge": "Horse Charge",
     "effect.artilleryandarmory.festering": "Festering",
 
     "entity.artilleryandarmory.kunai": "Kunai",
 
     "enchantment.artilleryandarmory.horse_back": "Horse Back",
+    "enchantment.artilleryandarmory.explosives": "Explosives",
+    "enchantment.artilleryandarmory.inflict": "Inflict",
+    "enchantment.artilleryandarmory.jumble": "Jumble",
 
     "death.attack.festering": "%1$s turned to dust!",
     "death.attack.exploded": "%1$s exploded mid-air!",

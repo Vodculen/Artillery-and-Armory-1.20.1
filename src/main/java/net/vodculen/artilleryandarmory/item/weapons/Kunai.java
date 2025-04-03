@@ -1,8 +1,9 @@
 package net.vodculen.artilleryandarmory.item.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
@@ -10,11 +11,16 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.Vanishable;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -23,6 +29,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.enchantment.ModEnchantmentHelper;
 import net.vodculen.artilleryandarmory.entity.custom.KunaiProjectileEntity;
 
 
@@ -68,9 +76,38 @@ public class Kunai extends Item implements Vanishable {
 			if (i >= 10) {
 				if (!world.isClient) {
 					stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
+					int level = ModEnchantmentHelper.getInflict(stack);
 					
 					KunaiProjectileEntity kunaiEntity = new KunaiProjectileEntity(world, playerEntity, stack);
 					kunaiEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, 0.5F, 1.0F);
+
+
+					if (level >= 1) {
+						ItemStack itemStack = user.getOffHandStack();
+						if (itemStack.isOf(Items.POTION)) {
+							Potion potion = PotionUtil.getPotion(itemStack);
+
+							if (potion == Potions.POISON) {
+								kunaiEntity.takeEffect(StatusEffects.POISON);
+							} else if (potion == Potions.SLOWNESS) {
+								kunaiEntity.takeEffect(StatusEffects.SLOWNESS);
+							} else if (potion == Potions.SLOWNESS) {
+								kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
+							} else if (potion == Potions.WEAKNESS) {
+								kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
+							} else {
+								kunaiEntity.takeEffect(ModEffects.FESTERING);
+							}
+
+							if (!playerEntity.getAbilities().creativeMode) {
+								playerEntity.getInventory().offHand.clear();
+							}
+
+							if (playerEntity.getOffHandStack().isEmpty()) {
+								playerEntity.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE));
+							}
+						}
+					}
 
 					if (playerEntity.getAbilities().creativeMode) {
 						kunaiEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
@@ -91,6 +128,7 @@ public class Kunai extends Item implements Vanishable {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
+
 		if (itemStack.getDamage() >= itemStack.getMaxDamage() - 1) {
 			return TypedActionResult.fail(itemStack);
 		} else if (EnchantmentHelper.getRiptide(itemStack) > 0 && !user.isTouchingWaterOrRain()) {
@@ -124,5 +162,17 @@ public class Kunai extends Item implements Vanishable {
 	@Override
 	public int getEnchantability() {
 		return 1;
+	}
+
+	public static boolean hasPoisonPotion(PlayerEntity playerEntity) {
+		ItemStack offHand = playerEntity.getOffHandStack();
+
+		if (offHand.getItem() == Items.POTION) {
+			Potion potion = PotionUtil.getPotion(offHand);
+
+			return potion == Potions.POISON;
+		}
+
+		return false;
 	}
 }

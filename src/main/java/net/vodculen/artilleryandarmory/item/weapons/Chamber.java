@@ -67,31 +67,33 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 					
 
 					
-						if (i >= 10) {
-							boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER);
+					if (i >= 10) {
+						boolean hasAmount = itemStack.getCount() >= 3;
+						boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER) && hasAmount;
+						
 		
-							if (!world.isClient) {
-								world.createExplosion(user, user.getX(), user.getY(), user.getZ(), 0.5F, false, ExplosionSourceType.NONE);
+						if (!world.isClient && hasAmount) {
+							world.createExplosion(user, user.getX(), user.getY(), user.getZ(), 0.5F, false, ExplosionSourceType.NONE);
 		
-								((PlayerEntity) user).velocityModified = true;
+							((PlayerEntity) user).velocityModified = true;
 									
-								user.addVelocity(0.0, 1.5, 0.0);
+							user.addVelocity(0.0, 1.5, 0.0);
 									
-								((PlayerEntity) user).getItemCooldownManager().set(this, 60);
-							}
+							((PlayerEntity) user).getItemCooldownManager().set(this, 60);
+						}
 		
 							
-							if (!bl2 && !playerEntity.getAbilities().creativeMode) {
-								itemStack.decrement(3);
+						if (!bl2 && !playerEntity.getAbilities().creativeMode) {
+							itemStack.decrement(3);
 								
-								if (itemStack.isEmpty()) {
-									playerEntity.getInventory().removeOne(itemStack);
-								}
+							if (itemStack.isEmpty()) {
+								playerEntity.getInventory().removeOne(itemStack);
 							}
 						}
-					}					
+					}
+				}					
 
-					playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+				playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
 			}
 		}
 	}
@@ -193,4 +195,6 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 		return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot);
 	}
+	
+
 }

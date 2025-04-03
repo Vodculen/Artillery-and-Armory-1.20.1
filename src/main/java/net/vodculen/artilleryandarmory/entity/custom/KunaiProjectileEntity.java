@@ -10,6 +10,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -34,6 +35,7 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 	private ItemStack kunaiStack = new ItemStack(ModItems.KUNAI);
 	private boolean dealtDamage;
 	public int returnTimer;
+	private StatusEffect applyEffects = ModEffects.FESTERING;
 
 	public KunaiProjectileEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
 		super(entityType, world);
@@ -114,14 +116,12 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		float f = 3.0F;
 		if (entity instanceof LivingEntity livingEntity) {
 			f += EnchantmentHelper.getAttackDamage(this.kunaiStack, livingEntity.getGroup());
-            livingEntity.addStatusEffect(new StatusEffectInstance(ModEffects.FESTERING, 100, 1, true, true));
+            livingEntity.addStatusEffect(new StatusEffectInstance(applyEffects, 100, 1, true, true));
 		}
 
 		Entity entity2 = this.getOwner();
 		DamageSource damageSource = new DamageSource(
-		world.getRegistryManager()
-				.get(RegistryKeys.DAMAGE_TYPE)
-				.entryOf(ModDamageTypes.KUNAIED));
+		world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(ModDamageTypes.KUNAIED));
 		this.dealtDamage = true;
 		SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_HIT;
 		if (entity.damage(damageSource, f)) {
@@ -182,5 +182,9 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 	@Override
 	public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
 		return true;
+	}
+
+	public StatusEffect takeEffect(StatusEffect effect) {
+		return applyEffects = effect;
 	}
 }

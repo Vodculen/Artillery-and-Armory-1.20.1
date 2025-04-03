@@ -1,5 +1,7 @@
 package net.vodculen.artilleryandarmory.item.weapons;
 
+import java.util.Collections;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
@@ -18,6 +20,7 @@ import net.minecraft.item.Vanishable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.enchantment.ModEnchantmentHelper;
 
 public class Hammer extends Item implements Vanishable {
 	private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
@@ -42,6 +45,13 @@ public class Hammer extends Item implements Vanishable {
 		if (!world.isClient) {
 			if (attacker.fallDistance > 0.0F) {
 				target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
+
+				int level = ModEnchantmentHelper.getJumble(stack);
+				if (level >= 1) {
+					if (target instanceof PlayerEntity player) {
+						Collections.shuffle(player.getInventory().main);
+					}	
+				}			
 			}
 		}
 

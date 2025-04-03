@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:cauldron"
+    },
+    "&": {
+      "item": "minecraft:flint"
+    },
+    ",": {
+      "item": "minecraft:iron_nugget"
+    },
+    "-": {
+      "item": "minecraft:smooth_stone"
+    },
+    ".": {
+      "item": "minecraft:stone_button"
+    },
+    "T": {
+      "item": "artilleryandarmory:hammer"
+    },
+    "^": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "^-.",
+    "T#,",
+    "^-&"
+  ],
+  "result": {
+    "item": "artilleryandarmory:chamber"
+  },
+  "show_notification": true
+}

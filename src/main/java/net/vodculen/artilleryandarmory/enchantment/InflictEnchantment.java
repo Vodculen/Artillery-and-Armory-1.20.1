@@ -6,14 +6,14 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.vodculen.artilleryandarmory.item.ModItems;
 
-public class HorseBackEnchantment extends Enchantment {
-	public HorseBackEnchantment() {
+public class InflictEnchantment extends Enchantment {
+    public InflictEnchantment() {
 		super(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 	}
 
 	@Override
 	public int getMinPower(int level) {
-		return 10;
+		return 20;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class HorseBackEnchantment extends Enchantment {
 
 	@Override
 	public boolean isAcceptableItem(ItemStack stack) {
-		return stack.isOf(ModItems.LANCE);
+		return stack.isOf(ModItems.KUNAI);
 	}
 
 	@Override
