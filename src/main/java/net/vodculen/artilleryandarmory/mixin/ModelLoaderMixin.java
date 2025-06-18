@@ -25,6 +25,5 @@ public abstract class ModelLoaderMixin {
     public void addHammer(BlockColors blockColors, Profiler profiler, Map<Identifier, JsonUnbakedModel> jsonUnbakedModels, Map<Identifier, List<ModelLoader.SourceTrackedData>> blockStates, CallbackInfo ci) {
         this.addModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "hammer_3d", "inventory"));
         this.addModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "chamber_3d", "inventory"));
-        this.addModel(new ModelIdentifier(ArtilleryArmory.MOD_ID, "kunai_3d", "inventory"));
     }
 }

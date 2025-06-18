@@ -132,11 +132,14 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		World world = attacker.getWorld();	
 
-		if (!world.isClient) {
-			if (attacker.fallDistance > 0.0F) {
-				target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
 
-				if (attacker instanceof PlayerEntity playerEntity) {
+
+		if (!world.isClient) {
+			if (attacker instanceof PlayerEntity playerEntity) {
+				if (attacker.fallDistance > 0.0F && !playerEntity.getItemCooldownManager().isCoolingDown(this)) {
+					target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
+
+					
 					boolean bl = playerEntity.getAbilities().creativeMode;
 					ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, playerEntity);
 					int level = ModEnchantmentHelper.getExplosives(stack);
@@ -195,6 +198,4 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 		return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot);
 	}
-	
-
 }
