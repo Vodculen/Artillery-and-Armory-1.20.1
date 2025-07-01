@@ -39,15 +39,10 @@ public class Lance extends Item implements Vanishable {
 
 	public Lance(Item.Settings settings) {
 		super(settings);
+
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", (double) attackDamage, EntityAttributeModifier.Operation.ADDITION)
-		);
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_SPEED,
-			new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Tool modifier", -2.9F, EntityAttributeModifier.Operation.ADDITION)
-		);
+		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", (double) attackDamage, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Tool modifier", -2.9F, EntityAttributeModifier.Operation.ADDITION));
 		this.attributeModifiers = builder.build();
 	}
 
@@ -68,20 +63,16 @@ public class Lance extends Item implements Vanishable {
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		if (user instanceof PlayerEntity playerEntity) {
-			int i = this.getMaxUseTime(stack) - remainingUseTicks;
-			if (i >= 10) {
-				if (!world.isClient) {
-                    if (user instanceof PlayerEntity player) {
-                        player.addStatusEffect(new StatusEffectInstance(ModEffects.CHARGE, 100, 1, true, true));
+		if (!world.isClient && user instanceof PlayerEntity player) {
+			int level = this.getMaxUseTime(stack) - remainingUseTicks;
 
-                        stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
-                        player.getItemCooldownManager().set(this, 300);
-                    }
-                    
-				}
+			if (level >= 10) {
+				player.addStatusEffect(new StatusEffectInstance(ModEffects.CHARGE, 100, 1, true, true));
 
-				playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+				stack.damage(1, player, p -> p.sendToolBreakStatus(user.getActiveHand()));
+
+				player.getItemCooldownManager().set(this, 300);
+				player.incrementStat(Stats.USED.getOrCreateStat(this));
 			}
 		}
 	}
@@ -126,13 +117,12 @@ public class Lance extends Item implements Vanishable {
 
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		if (entity instanceof ServerPlayerEntity player) {
-			if (player.getVehicle() instanceof HorseEntity horse && stack.isOf(ModItems.LANCE) && selected == true) {
-				int level = ModEnchantmentHelper.getHorseBack(stack);
-				if (level >= 1 && stack.isOf(ModItems.LANCE)) {
-					player.addStatusEffect(new StatusEffectInstance(ModEffects.HORSE_CHARGE, 10, 1, true, true));
-					horse.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, 1, false, false));
-				}
+		if (!world.isClient && entity instanceof ServerPlayerEntity player && player.getVehicle() instanceof HorseEntity horse && stack.isOf(ModItems.LANCE) && selected == true) {
+			int level = ModEnchantmentHelper.getHorseBack(stack);
+			
+			if (level >= 1) {
+				player.addStatusEffect(new StatusEffectInstance(ModEffects.HORSE_CHARGE, 10, 1, true, true));
+				horse.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, 1, false, false));
 			}
 		}
 		

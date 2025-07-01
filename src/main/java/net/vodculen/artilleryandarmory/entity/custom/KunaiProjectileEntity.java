@@ -76,8 +76,8 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 					this.lastRenderY = this.getY();
 				}
 
-				double d = 0.1 * 3;
-				this.setVelocity(this.getVelocity().multiply(0.95).add(vec3d.normalize().multiply(d)));
+				double multiplyer = 0.1 * 3;
+				this.setVelocity(this.getVelocity().multiply(0.95).add(vec3d.normalize().multiply(multiplyer)));
 				if (this.returnTimer == 0) {
 					this.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 10.0F, 1.0F);
 				}
@@ -113,9 +113,9 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		Entity entity = entityHitResult.getEntity();
 		World world = entity.getWorld();
-		float f = 3.0F;
+		float damage = 3.0F;
 		if (entity instanceof LivingEntity livingEntity) {
-			f += EnchantmentHelper.getAttackDamage(this.kunaiStack, livingEntity.getGroup());
+			damage += EnchantmentHelper.getAttackDamage(this.kunaiStack, livingEntity.getGroup());
             livingEntity.addStatusEffect(new StatusEffectInstance(applyEffects, 100, 1, true, true));
 		}
 
@@ -124,7 +124,7 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(ModDamageTypes.KUNAIED));
 		this.dealtDamage = true;
 		SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_HIT;
-		if (entity.damage(damageSource, f)) {
+		if (entity.damage(damageSource, damage)) {
 			if (entity.getType() == EntityType.ENDERMAN) {
 				return;
 			}
@@ -140,9 +140,9 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		}
 
 		this.setVelocity(this.getVelocity().multiply(-0.01, -0.1, -0.01));
-		float g = 1.0F;
+		float volume = 1.0F;
 
-		this.playSound(soundEvent, g, 1.0F);
+		this.playSound(soundEvent, volume, 1.0F);
 	}
 
 	@Override

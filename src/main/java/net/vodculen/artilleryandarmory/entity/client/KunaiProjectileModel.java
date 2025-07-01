@@ -22,6 +22,7 @@ public class KunaiProjectileModel extends EntityModel<KunaiProjectileEntity> {
 	public KunaiProjectileModel(ModelPart root) {
 		this.kunai = root.getChild("kunai");
 	}
+	
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
@@ -37,8 +38,8 @@ public class KunaiProjectileModel extends EntityModel<KunaiProjectileEntity> {
 	}
 
 	@Override
-	public void setAngles(KunaiProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-	}
+	public void setAngles(KunaiProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {}
+
 	@Override
 	public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
 		kunai.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);

@@ -36,64 +36,50 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 
 	public Chamber(Settings settings) {
 		super(settings);
+
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 15.0, EntityAttributeModifier.Operation.ADDITION)
-		);
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_SPEED,
-			new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.93, EntityAttributeModifier.Operation.ADDITION)
-		);
+		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 15.0, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.93, EntityAttributeModifier.Operation.ADDITION));
 		this.attributeModifiers = builder.build();
 	}
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		if (user instanceof PlayerEntity playerEntity) {
-			stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
+		if (!world.isClient && user instanceof PlayerEntity player) {
+			stack.damage(1, player, p -> p.sendToolBreakStatus(user.getActiveHand()));
 
-			boolean bl = playerEntity.getAbilities().creativeMode;
-			ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, playerEntity);
+			ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, player);
+			boolean hasAmount = itemStack.getCount() >= 3;
+			boolean inCreativeMode = player.getAbilities().creativeMode;
+			boolean canUseAbility = inCreativeMode && itemStack.isOf(Items.GUNPOWDER) && hasAmount;
 			int level = ModEnchantmentHelper.getExplosives(stack);
+			int timeUsed = this.getMaxUseTime(stack) - remainingUseTicks;
 
-			if (level < 1) {
-				if (!itemStack.isEmpty() || bl) {
-					if (itemStack.isEmpty()) {
-						itemStack = new ItemStack(Items.GUNPOWDER);
+			if (level < 1 && (!itemStack.isEmpty() || inCreativeMode)) {
+				if (itemStack.isEmpty()) {
+					itemStack = new ItemStack(Items.GUNPOWDER);
+				}
+
+				if (timeUsed >= 10) {
+					if (hasAmount || inCreativeMode) {
+						world.createExplosion(user, user.getX(), user.getY(), user.getZ(), 0.5F, false, ExplosionSourceType.NONE);
+	
+						player.velocityModified = true;
+						player.addVelocity(0.0, 1.5, 0.0);
+						player.getItemCooldownManager().set(this, 60);
 					}
-
-					int i = this.getMaxUseTime(stack) - remainingUseTicks;
-					
-
-					
-					if (i >= 10) {
-						boolean hasAmount = itemStack.getCount() >= 3;
-						boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER) && hasAmount;
+	
 						
-		
-						if (!world.isClient && hasAmount) {
-							world.createExplosion(user, user.getX(), user.getY(), user.getZ(), 0.5F, false, ExplosionSourceType.NONE);
-		
-							((PlayerEntity) user).velocityModified = true;
-									
-							user.addVelocity(0.0, 1.5, 0.0);
-									
-							((PlayerEntity) user).getItemCooldownManager().set(this, 60);
-						}
-		
+					if (!canUseAbility) {
+						itemStack.decrement(3);
 							
-						if (!bl2 && !playerEntity.getAbilities().creativeMode) {
-							itemStack.decrement(3);
-								
-							if (itemStack.isEmpty()) {
-								playerEntity.getInventory().removeOne(itemStack);
-							}
+						if (itemStack.isEmpty()) {
+							player.getInventory().removeOne(itemStack);
 						}
 					}
 				}					
 
-				playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+				player.incrementStat(Stats.USED.getOrCreateStat(this));
 			}
 		}
 	}
@@ -132,47 +118,31 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		World world = attacker.getWorld();	
 
+		if (!world.isClient && attacker instanceof PlayerEntity player && !player.isOnGround()) {
+			target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
 
+			ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, player);
+			boolean inCreativeMode = player.getAbilities().creativeMode;
+			boolean canUseAbility = inCreativeMode && itemStack.isOf(Items.GUNPOWDER);
+			int level = ModEnchantmentHelper.getExplosives(stack);
 
-		if (!world.isClient) {
-			if (attacker instanceof PlayerEntity playerEntity) {
-				if (attacker.fallDistance > 0.0F && !playerEntity.getItemCooldownManager().isCoolingDown(this)) {
-					target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
-
-					
-					boolean bl = playerEntity.getAbilities().creativeMode;
-					ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, playerEntity);
-					int level = ModEnchantmentHelper.getExplosives(stack);
-
-					if (level >= 1) {
-						if (!itemStack.isEmpty() || bl) {
-							if (itemStack.isEmpty()) {
-								itemStack = new ItemStack(Items.GUNPOWDER);
-							}
-		
-							
-		
-							
-							boolean bl2 = bl && itemStack.isOf(Items.GUNPOWDER);
-			
-							if (!world.isClient) {
-								world.createExplosion(playerEntity, target.getX(), target.getY(), target.getZ(), 0.5F, false, ExplosionSourceType.NONE);
-							}
-				
-									
-							if (!bl2 && !playerEntity.getAbilities().creativeMode) {
-								itemStack.decrement(3);
-										
-								if (itemStack.isEmpty()) {
-									playerEntity.getInventory().removeOne(itemStack);
-								}
-							}
-						}					
-					}
-					
-					playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+			if (level >= 1 && (!itemStack.isEmpty() || inCreativeMode)) {
+				if (itemStack.isEmpty()) {
+					itemStack = new ItemStack(Items.GUNPOWDER);
 				}
+
+				world.createExplosion(player, target.getX(), target.getY(), target.getZ(), 0.5F, false, ExplosionSourceType.NONE);
+		
+				if (!canUseAbility) {
+					itemStack.decrement(3);
+							
+					if (itemStack.isEmpty()) {
+						player.getInventory().removeOne(itemStack);
+					}
+				}			
 			}
+			
+			player.incrementStat(Stats.USED.getOrCreateStat(this));
 		}
 
 		stack.damage(1, attacker, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));

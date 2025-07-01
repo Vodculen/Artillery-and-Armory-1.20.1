@@ -42,15 +42,10 @@ public class Kunai extends Item implements Vanishable {
 
 	public Kunai(Item.Settings settings) {
 		super(settings);
+
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", 6.0, EntityAttributeModifier.Operation.ADDITION)
-		);
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_SPEED,
-			new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Tool modifier", -2.9F, EntityAttributeModifier.Operation.ADDITION)
-		);
+		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Tool modifier", 6.0, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED,new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Tool modifier", -2.9F, EntityAttributeModifier.Operation.ADDITION));
 		this.attributeModifiers = builder.build();
 	}
 
@@ -71,56 +66,52 @@ public class Kunai extends Item implements Vanishable {
 
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-		if (user instanceof PlayerEntity playerEntity) {
-			int i = this.getMaxUseTime(stack) - remainingUseTicks;
-			if (i >= 10) {
-				if (!world.isClient) {
-					stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
-					int level = ModEnchantmentHelper.getInflict(stack);
-					
-					KunaiProjectileEntity kunaiEntity = new KunaiProjectileEntity(world, playerEntity, stack);
-					kunaiEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, 0.5F, 1.0F);
+		if (!world.isClient && user instanceof PlayerEntity playerEntity) {
+			ItemStack itemStack = user.getOffHandStack();
+			Potion potion = PotionUtil.getPotion(itemStack);
+			int timeUsed = this.getMaxUseTime(stack) - remainingUseTicks;
+			int level = ModEnchantmentHelper.getInflict(stack);
 
+			if (timeUsed >= 10) {
+				stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
+				
+				KunaiProjectileEntity kunaiEntity = new KunaiProjectileEntity(world, playerEntity, stack);
+				kunaiEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, 0.5F, 1.0F);
 
-					if (level >= 1) {
-						ItemStack itemStack = user.getOffHandStack();
-						if (itemStack.isOf(Items.POTION)) {
-							Potion potion = PotionUtil.getPotion(itemStack);
-
-							if (potion == Potions.POISON) {
-								kunaiEntity.takeEffect(StatusEffects.POISON);
-							} else if (potion == Potions.SLOWNESS) {
-								kunaiEntity.takeEffect(StatusEffects.SLOWNESS);
-							} else if (potion == Potions.SLOWNESS) {
-								kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
-							} else if (potion == Potions.WEAKNESS) {
-								kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
-							} else {
-								kunaiEntity.takeEffect(ModEffects.FESTERING);
-							}
-
-							if (!playerEntity.getAbilities().creativeMode) {
-								playerEntity.getInventory().offHand.clear();
-							}
-
-							if (playerEntity.getOffHandStack().isEmpty()) {
-								playerEntity.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE));
-							}
-						}
+				if (level >= 1 && itemStack.isOf(Items.POTION)) {
+					if (potion == Potions.POISON) {
+						kunaiEntity.takeEffect(StatusEffects.POISON);
+					} else if (potion == Potions.SLOWNESS) {
+						kunaiEntity.takeEffect(StatusEffects.SLOWNESS);
+					} else if (potion == Potions.SLOWNESS) {
+						kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
+					} else if (potion == Potions.WEAKNESS) {
+						kunaiEntity.takeEffect(StatusEffects.WEAKNESS);
+					} else {
+						kunaiEntity.takeEffect(ModEffects.FESTERING);
 					}
 
-					if (playerEntity.getAbilities().creativeMode) {
-						kunaiEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
-					}
-
-					world.spawnEntity(kunaiEntity);
-					world.playSoundFromEntity(null, kunaiEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					if (!playerEntity.getAbilities().creativeMode) {
-						playerEntity.getInventory().removeOne(stack);
+						playerEntity.getInventory().offHand.clear();
 					}
 
-					playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+					if (playerEntity.getOffHandStack().isEmpty()) {
+						playerEntity.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE));
+					}
 				}
+
+				if (playerEntity.getAbilities().creativeMode) {
+					kunaiEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+				}
+
+				world.spawnEntity(kunaiEntity);
+				world.playSoundFromEntity(null, kunaiEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				
+				if (!playerEntity.getAbilities().creativeMode) {
+					playerEntity.getInventory().removeOne(stack);
+				}
+
+				playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
 			}
 		}
 	}
@@ -162,17 +153,5 @@ public class Kunai extends Item implements Vanishable {
 	@Override
 	public int getEnchantability() {
 		return 1;
-	}
-
-	public static boolean hasPoisonPotion(PlayerEntity playerEntity) {
-		ItemStack offHand = playerEntity.getOffHandStack();
-
-		if (offHand.getItem() == Items.POTION) {
-			Potion potion = PotionUtil.getPotion(offHand);
-
-			return potion == Potions.POISON;
-		}
-
-		return false;
 	}
 }

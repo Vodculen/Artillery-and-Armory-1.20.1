@@ -1,7 +1,5 @@
 package net.vodculen.artilleryandarmory.item.weapons;
 
-import java.util.Collections;
-
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
@@ -20,39 +18,25 @@ import net.minecraft.item.Vanishable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
-import net.vodculen.artilleryandarmory.enchantment.ModEnchantmentHelper;
+
 
 public class Hammer extends Item implements Vanishable {
 	private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
 	public Hammer(Settings settings) {
 		super(settings);
+
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_DAMAGE,
-			new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 15.0, EntityAttributeModifier.Operation.ADDITION)
-		);
-		builder.put(
-			EntityAttributes.GENERIC_ATTACK_SPEED,
-			new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.93, EntityAttributeModifier.Operation.ADDITION)
-		);
+		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 15.0, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.93, EntityAttributeModifier.Operation.ADDITION));
 		this.attributeModifiers = builder.build();
 	}
 
 	@Override
 	public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		World world = attacker.getWorld();	
-		if (!world.isClient) {
-			if (attacker.fallDistance > 0.0F) {
-				target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
-
-				int level = ModEnchantmentHelper.getJumble(stack);
-				if (level >= 1) {
-					if (target instanceof PlayerEntity player) {
-						Collections.shuffle(player.getInventory().main);
-					}	
-				}			
-			}
+		if (!world.isClient && attacker.fallDistance > 0.0F) {
+			target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
 		}
 
 		stack.damage(1, attacker, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));

@@ -10,7 +10,6 @@ public class ModEnchantments {
 	public static final Enchantment HORSE_BACK = registerEnchantment("horse_back", new HorseBackEnchantment());
 	public static final Enchantment EXPLOSIVES = registerEnchantment("explosives", new ExplosivesEnchantment());
 	public static final Enchantment INFLICT = registerEnchantment("inflict", new InflictEnchantment());
-	public static final Enchantment JUMBLE = registerEnchantment("jumble", new JumbleEnchantment());
 
 
     private static Enchantment registerEnchantment(String name, Enchantment enchantment) {

@@ -7,7 +7,6 @@ import net.fabricmc.api.ModInitializer;
 import net.vodculen.artilleryandarmory.effect.ModEffects;
 import net.vodculen.artilleryandarmory.enchantment.ModEnchantments;
 import net.vodculen.artilleryandarmory.entity.ModEntities;
-import net.vodculen.artilleryandarmory.item.ModItemGroups;
 import net.vodculen.artilleryandarmory.item.ModItems;
 import net.vodculen.artilleryandarmory.util.ModLootTables;
 import net.vodculen.artilleryandarmory.util.ModVillagerTrades;
@@ -20,7 +19,6 @@ public class ArtilleryArmory implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
-		ModItemGroups.registerItemGroups();
 		ModEffects.registerModEffects();
 		ModEntities.registerModEntityTypes();
 		ModEnchantments.registerModEnchantments();

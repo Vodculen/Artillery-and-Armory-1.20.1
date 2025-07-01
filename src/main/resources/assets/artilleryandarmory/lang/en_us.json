@@ -1,23 +1,22 @@
 {
-    "item.artilleryandarmory.hammer": "Hammer",
-    "item.artilleryandarmory.chamber": "Chamber",
-    "item.artilleryandarmory.kunai": "Kunai",
-    "item.artilleryandarmory.lance": "Lance",
+	"item.artilleryandarmory.hammer": "Hammer",
+	"item.artilleryandarmory.chamber": "Chamber",
+	"item.artilleryandarmory.kunai": "Kunai",
+	"item.artilleryandarmory.lance": "Lance",
 
-    "effect.artilleryandarmory.dazed": "Dazed",
-    "effect.artilleryandarmory.charge": "Charge",
-    "effect.artilleryandarmory.horse_charge": "Horse Charge",
-    "effect.artilleryandarmory.festering": "Festering",
+	"effect.artilleryandarmory.dazed": "Dazed",
+	"effect.artilleryandarmory.charge": "Charge",
+	"effect.artilleryandarmory.horse_charge": "Horse Charge",
+	"effect.artilleryandarmory.festering": "Festering",
 
-    "entity.artilleryandarmory.kunai": "Kunai",
+	"entity.artilleryandarmory.kunai": "Kunai",
 
-    "enchantment.artilleryandarmory.horse_back": "Horse Back",
-    "enchantment.artilleryandarmory.explosives": "Explosives",
-    "enchantment.artilleryandarmory.inflict": "Inflict",
-    "enchantment.artilleryandarmory.jumble": "Jumble",
+	"enchantment.artilleryandarmory.horse_back": "Horse Back",
+	"enchantment.artilleryandarmory.explosives": "Explosives",
+	"enchantment.artilleryandarmory.inflict": "Inflict",
+	"enchantment.artilleryandarmory.jumble": "Jumble",
 
-    "death.attack.festering": "%1$s turned to dust!",
-    "death.attack.exploded": "%1$s exploded mid-air!",
-
-    "itemgroup.artillery_and_armory_item_group": "Artillery & Armory"
+	"death.attack.festering": "%1$s turned to dust!",
+	"death.attack.exploded": "%1$s exploded mid-air!",
+	"death.attack.kunaied": "%1$s got impaled by a kunai!"
 }
