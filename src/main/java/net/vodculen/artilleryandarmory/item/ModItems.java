@@ -8,30 +8,26 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.vodculen.artilleryandarmory.ArtilleryArmory;
-import net.vodculen.artilleryandarmory.item.weapons.Chamber;
-import net.vodculen.artilleryandarmory.item.weapons.Hammer;
-import net.vodculen.artilleryandarmory.item.weapons.Kunai;
-import net.vodculen.artilleryandarmory.item.weapons.Lance;
+import net.vodculen.artilleryandarmory.item.custom.ChamberItem;
+import net.vodculen.artilleryandarmory.item.custom.HammerItem;
+import net.vodculen.artilleryandarmory.item.custom.KunaiItem;
+import net.vodculen.artilleryandarmory.item.custom.LanceItem;
 
 
 public class ModItems {
-	// The item definitions 
-	public static final Item HAMMER = registerItem("hammer", new Hammer(new Item.Settings().maxDamage(762)));  
-	public static final Item CHAMBER = registerItem("chamber", new Chamber(new Item.Settings().maxDamage(1024)));  
-	public static final Item LANCE = registerItem("lance", new Lance(new Item.Settings().maxDamage(512))); 
-	public static final Item KUNAI = registerItem("kunai", new Kunai(new Item.Settings().maxDamage(762))); 
+	public static final Item HAMMER = registerItem("hammer", new HammerItem(new Item.Settings().maxDamage(762)));  
+	public static final Item CHAMBER = registerItem("chamber", new ChamberItem(new Item.Settings().maxDamage(1024)));  
+	public static final Item LANCE = registerItem("lance", new LanceItem(new Item.Settings().maxDamage(512))); 
+	public static final Item KUNAI = registerItem("kunai", new KunaiItem(new Item.Settings().maxDamage(762)));
 	
-	
-	// This allows the Items to be defined easily
+	// Below are helper classes that make defining Items easier as well as making them accessible to the entry class
 	private static Item registerItem(String name, Item item) {
 		return Registry.register(Registries.ITEM, Identifier.of(ArtilleryArmory.MOD_ID, name), item);
 	}
 
-	// This makes the class known to the mod
 	public static void registerModItems() {
-		ArtilleryArmory.LOGGER.info("[Artillery & Armory]: Registering Modded Items");
+		ArtilleryArmory.LOGGER.info("Registering Modded Items");
 
-		// It also puts the Items into a pre-existing ItemGroup
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> {
 			entries.addAfter(Items.TRIDENT, ModItems.KUNAI);
 			entries.addAfter(ModItems.KUNAI, ModItems.HAMMER);

@@ -1,4 +1,4 @@
-package net.vodculen.artilleryandarmory.item.weapons;
+package net.vodculen.artilleryandarmory.item.custom;
 
 import java.util.function.Predicate;
 

@@ -1,4 +1,4 @@
-package net.vodculen.artilleryandarmory.item.weapons;
+package net.vodculen.artilleryandarmory.item.custom;
 
 import java.util.function.Predicate;
 
@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -24,22 +25,23 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.World.ExplosionSourceType;
-import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.effect.ModStatusEffects;
 import net.vodculen.artilleryandarmory.enchantment.ModEnchantmentHelper;
 import net.vodculen.artilleryandarmory.util.WeaponUtils;
 
 
-public class Chamber extends ExplodingWeaponItem implements Vanishable {
+public class ChamberItem extends ExplodingWeaponItem implements Vanishable {
 	private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+	private boolean canExplode = false;
 	public static final int TICKS_PER_SECOND = 20;
 	public static final int RANGE = 15;
 
-	public Chamber(Settings settings) {
+	public ChamberItem(Settings settings) {
 		super(settings);
 
 		Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 15.0, EntityAttributeModifier.Operation.ADDITION));
-		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.93, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 9.0, EntityAttributeModifier.Operation.ADDITION));
+		builder.put(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -3.4, EntityAttributeModifier.Operation.ADDITION));
 		this.attributeModifiers = builder.build();
 	}
 
@@ -116,10 +118,10 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 
 	@Override
 	public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		World world = attacker.getWorld();	
+		World world = attacker.getWorld();
 
-		if (!world.isClient && attacker instanceof PlayerEntity player && !player.isOnGround()) {
-			target.addStatusEffect(new StatusEffectInstance(ModEffects.DAZED, 10, 1, true, true));
+		if (!world.isClient && attacker instanceof PlayerEntity player && attacker.fallDistance > 0.0F && canExplode) {
+			target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.DAZED, 10, 1, true, true));
 
 			ItemStack itemStack = WeaponUtils.getProjectileTypeForWeapon(stack, player);
 			boolean inCreativeMode = player.getAbilities().creativeMode;
@@ -141,7 +143,7 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 					}
 				}			
 			}
-			
+
 			player.incrementStat(Stats.USED.getOrCreateStat(this));
 		}
 
@@ -167,5 +169,18 @@ public class Chamber extends ExplodingWeaponItem implements Vanishable {
 	@Override
 	public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
 		return slot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(slot);
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+		if (entity instanceof PlayerEntity player) {
+			if (player.getAttackCooldownProgress(1.0F) > 0.9F) {
+				canExplode = true;
+			} else {
+				canExplode = false;
+			}
+		}
+		
+		super.inventoryTick(stack, world, entity, slot, selected);
 	}
 }

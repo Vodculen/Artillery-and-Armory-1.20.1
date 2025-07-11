@@ -12,12 +12,12 @@ public class ModEnchantments {
 	public static final Enchantment INFLICT = registerEnchantment("inflict", new InflictEnchantment());
 
 
+	// Below are helper classes that make defining Items easier as well as making them accessible to the entry class
     private static Enchantment registerEnchantment(String name, Enchantment enchantment) {
 		return Registry.register(Registries.ENCHANTMENT, Identifier.of(ArtilleryArmory.MOD_ID, name), enchantment);
 	}
 
-
 	public static void registerModEnchantments() {
-		ArtilleryArmory.LOGGER.info("Registering Mod Enchantments for " + ArtilleryArmory.MOD_ID);
+		ArtilleryArmory.LOGGER.info("Registering Modded Enchantments");
 	}
 }

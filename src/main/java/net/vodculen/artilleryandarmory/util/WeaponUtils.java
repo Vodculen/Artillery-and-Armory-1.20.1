@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.vodculen.artilleryandarmory.item.weapons.ExplodingWeaponItem;
+import net.vodculen.artilleryandarmory.item.custom.ExplodingWeaponItem;
 
 public class WeaponUtils {
 	public static ItemStack getProjectileTypeForWeapon(ItemStack stack, PlayerEntity player) {

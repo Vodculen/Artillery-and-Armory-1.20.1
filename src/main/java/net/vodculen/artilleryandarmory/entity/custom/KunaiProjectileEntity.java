@@ -1,5 +1,8 @@
 package net.vodculen.artilleryandarmory.entity.custom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,7 +13,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -25,7 +27,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.vodculen.artilleryandarmory.damageType.ModDamageTypes;
-import net.vodculen.artilleryandarmory.effect.ModEffects;
 import net.vodculen.artilleryandarmory.entity.ModEntities;
 import net.vodculen.artilleryandarmory.item.ModItems;
 
@@ -35,7 +36,7 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 	private ItemStack kunaiStack = new ItemStack(ModItems.KUNAI);
 	private boolean dealtDamage;
 	public int returnTimer;
-	private StatusEffect applyEffects = ModEffects.FESTERING;
+	private List<StatusEffectInstance> applyEffects = new ArrayList<>();
 
 	public KunaiProjectileEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
 		super(entityType, world);
@@ -76,8 +77,8 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 					this.lastRenderY = this.getY();
 				}
 
-				double multiplyer = 0.1 * 3;
-				this.setVelocity(this.getVelocity().multiply(0.95).add(vec3d.normalize().multiply(multiplyer)));
+				double multiplier = 0.1 * 3;
+				this.setVelocity(this.getVelocity().multiply(0.95).add(vec3d.normalize().multiply(multiplier)));
 				if (this.returnTimer == 0) {
 					this.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 10.0F, 1.0F);
 				}
@@ -114,9 +115,14 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		Entity entity = entityHitResult.getEntity();
 		World world = entity.getWorld();
 		float damage = 3.0F;
+
 		if (entity instanceof LivingEntity livingEntity) {
 			damage += EnchantmentHelper.getAttackDamage(this.kunaiStack, livingEntity.getGroup());
-            livingEntity.addStatusEffect(new StatusEffectInstance(applyEffects, 100, 1, true, true));
+			if (applyEffects != null) {
+				for (StatusEffectInstance effect : applyEffects) {
+					livingEntity.addStatusEffect(new StatusEffectInstance(effect.getEffectType(), 200, effect.getAmplifier(), true, true));
+				}		
+			}	
 		}
 
 		Entity entity2 = this.getOwner();
@@ -184,7 +190,7 @@ public class KunaiProjectileEntity extends PersistentProjectileEntity {
 		return true;
 	}
 
-	public StatusEffect takeEffect(StatusEffect effect) {
-		return applyEffects = effect;
+	public List<StatusEffectInstance> takeEffect(List<StatusEffectInstance> effects) {
+		return applyEffects = effects;
 	}
 }

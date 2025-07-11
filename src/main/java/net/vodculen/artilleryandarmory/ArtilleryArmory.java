@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fabricmc.api.ModInitializer;
-import net.vodculen.artilleryandarmory.effect.ModEffects;
+import net.vodculen.artilleryandarmory.effect.ModStatusEffects;
 import net.vodculen.artilleryandarmory.enchantment.ModEnchantments;
 import net.vodculen.artilleryandarmory.entity.ModEntities;
 import net.vodculen.artilleryandarmory.item.ModItems;
@@ -19,10 +19,10 @@ public class ArtilleryArmory implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
-		ModEffects.registerModEffects();
+		ModStatusEffects.registerModEffects();
 		ModEntities.registerModEntityTypes();
 		ModEnchantments.registerModEnchantments();
 		ModVillagerTrades.registerModVillagerTrades();
 		ModLootTables.registerLootTables();
-    }
+	}
 }
