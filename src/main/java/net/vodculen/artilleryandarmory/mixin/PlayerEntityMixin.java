@@ -64,7 +64,7 @@ public abstract class PlayerEntityMixin implements ChargeableEntity {
 		float distance = MathHelper.sqrt((x * x) + (y * y) + (z * z));
 
 		x *= speed / distance;
-		y *= speed / distance;
+		y *= speed / distance * (1 / 2);
 		z *= speed / distance;
 
 		charger.velocityModified = true;

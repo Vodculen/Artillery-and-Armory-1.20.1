@@ -84,7 +84,7 @@ public class KunaiItem extends Item implements Vanishable {
 
 				stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(user.getActiveHand()));
 				
-				kunaiEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, 1.5F, 1.0F);
+				kunaiEntity.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, 1.0F, 1.0F);
 
 				if (level >= 1 && itemStack.isOf(Items.POTION)) {
 					kunaiEntity.takeEffect(potion.getEffects());
